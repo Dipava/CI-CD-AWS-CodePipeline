@@ -29,9 +29,8 @@ sudo chmod 600 ~/.ssh/terraform-key-pem.pem
 ssh -i ~/.ssh/terraform-key-pem.pem ec2-user@34.228.24.20
 
 
-aws cli for linux (optional):
+aws cli for linux install (optional):
 
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
-aws --version
