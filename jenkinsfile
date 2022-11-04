@@ -1,90 +1,158 @@
 pipeline {
     agent any
-
-    parameters {
-        string(name: 'environment', defaultValue: 'terraform', description: 'Workspace/environment file to use for deployment')
-        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
-        booleanParam(name: 'destroy', defaultValue: false, description: 'Destroy Terraform build?')
-
-    }
-
-
-     environment {
-        AWS_ACCESS_KEY_ID     = credentials('Access key ID')
-        AWS_SECRET_ACCESS_KEY = credentials('Secret access key')
-    }
-
+	
+	 tools {
+  git 'Default'
+  terraform 'terraform-latest'
+		}
 
     stages {
-        stage('checkout') {
+        stage('checkoutfrom GIT') {
             steps {
-                 script{
-                        dir("terraform")
-                        {
-                            git "https://github.com/Dipava/CI-CD-AWS-CodePipeline.git"
-                        }
-                    }
-                }
-            }
-
-        stage('Plan') {
-            when {
-                not {
-                    equals expected: true, actual: params.destroy
-                }
-            }
-            
-            steps {
-                sh 'terraform init -input=false'
-                sh 'terraform workspace select ${environment} || terraform workspace new ${environment}'
-
-                sh "terraform plan -input=false -out tfplan "
-                sh 'terraform show -no-color tfplan > tfplan.txt'
+                git branch: 'main',
+                url: 'https://github.com/Dipava/CICD-Simple'
             }
         }
-        stage('Approval') {
-           when {
-               not {
-                   equals expected: true, actual: params.autoApprove
-               }
-               not {
-                    equals expected: true, actual: params.destroy
-                }
-           }
-           
-                
-            
 
-           steps {
-               script {
-                    def plan = readFile 'tfplan.txt'
-                    input message: "Do you want to apply the plan?",
-                    parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
-               }
-           }
-       }
-
-        stage('Apply') {
-            when {
-                not {
-                    equals expected: true, actual: params.destroy
-                }
-            }
-            
+        stage('terraform init: Module1') {
             steps {
-                sh "terraform apply -input=false tfplan"
+                sh 'terraform -chdir="./Module1" init'
+            }
+        }
+            
+        stage('terraform fmt: Module1') {
+            steps {
+                sh 'terraform -chdir="./Module1" fmt'
+            }
+        }
+        
+
+        stage('terraform validate: Module1') {
+            steps {
+                sh 'terraform -chdir="./Module1" validate'
+            }
+        }
+        
+
+
+        stage('terraform plan: Module1') {
+            steps {
+                sh 'terraform -chdir="./Module1" plan'
+            }
+        }
+
+
+        stage('Apply-Approval: Module1') {
+            steps {
+                input 'Do you want to Apply'
+            }
+        }
+
+        stage('apply: Module1') {
+            steps {
+                sh "terraform apply -chdir="./Module1" -auto-approve"
+            }
+        }
+
+        stage('Destroy-Approval') {
+            steps {
+                input 'Do you want to Destroy'
+            }
+        }
+
+
+        stage('terraform init: Module2') {
+            steps {
+                sh 'terraform -chdir="./Module2" init'
+            }
+        }
+            
+        stage('terraform fmt: Module2') {
+            steps {
+                sh 'terraform -chdir="./Module2" fmt'
+            }
+        }
+        
+
+        stage('terraform validate: Module2') {
+            steps {
+                sh 'terraform -chdir="./Module2" validate'
+            }
+        }
+        
+
+
+        stage('terraform plan: Module2') {
+            steps {
+                sh 'terraform -chdir="./Module2" plan'
+            }
+        }
+
+
+        stage('Apply-Approval: Module2') {
+            steps {
+                input 'Do you want to Apply'
+            }
+        }
+
+        stage('apply: Module2') {
+            steps {
+                sh "terraform apply -chdir="./Module2" -auto-approve"
+            }
+        }
+
+        stage('terraform init: Module3') {
+            steps {
+                sh 'terraform -chdir="./Module3" init'
+            }
+        }
+            
+        stage('terraform fmt: Module3') {
+            steps {
+                sh 'terraform -chdir="./Module3" fmt'
+            }
+        }
+        
+
+        stage('terraform validate: Module3') {
+            steps {
+                sh 'terraform -chdir="./Module3" validate'
+            }
+        }
+        
+
+
+        stage('terraform plan: Module3') {
+            steps {
+                sh 'terraform -chdir="./Module3" plan'
+            }
+        }
+
+
+        stage('Apply-Approval: Module3') {
+            steps {
+                input 'Do you want to Apply'
+            }
+        }
+
+        stage('apply: Module3') {
+            steps {
+                sh "terraform apply -chdir="./Module3" -auto-approve"
             }
         }
         
         stage('Destroy') {
-            when {
-                equals expected: true, actual: params.destroy
+            steps {
+                sh "terraform destroy -auto-approve"
             }
-        
-        steps {
-           sh "terraform destroy --auto-approve"
         }
-    }
 
-  }
+
+        stage('Delete project directory') {
+            steps {
+                sh "sudo rm -rf /var/lib/jenkins/workspace/vpc-test"
+            }
+        }
+
+    }
 }
