@@ -10,7 +10,7 @@ pipeline {
         stage('checkoutfrom GIT') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/Dipava/CICD-Simple'
+                url: 'https://github.com/Dipava/CI-CD-AWS-CodePipeline'
             }
         }
 
@@ -54,11 +54,7 @@ pipeline {
             }
         }
 
-        stage('Destroy-Approval') {
-            steps {
-                input 'Do you want to Destroy'
-            }
-        }
+
 
 
         stage('terraform init: Module2') {
@@ -97,7 +93,7 @@ pipeline {
 
         stage('apply: Module2') {
             steps {
-                sh "terraform apply -chdir="./Module2" -auto-approve"
+                sh "terraform apply -chdir="./Module2" -var-file=secrets.tfvars -auto-approve"
             }
         }
 
@@ -141,16 +137,34 @@ pipeline {
             }
         }
         
-        stage('Destroy') {
+        stage('Destroy-Approval') {
             steps {
-                sh "terraform destroy -auto-approve"
+                input 'Do you want to Destroy'
+            }
+        }
+
+        stage('Destroy: Module 3') {
+            steps {
+                sh "terraform apply -chdir="./Module3" -auto-approve"
+            }
+        }
+
+                stage('Destroy: Module 2') {
+            steps {
+                sh "terraform apply -chdir="./Module2" -var-file=secrets.tfvars -auto-approve"
+            }
+        }
+
+                stage('Destroy: Module 1') {
+            steps {
+                sh "terraform apply -chdir="./Module1" -var-file=secrets.tfvars -auto-approve"
             }
         }
 
 
         stage('Delete project directory') {
             steps {
-                sh "sudo rm -rf /var/lib/jenkins/workspace/vpc-test"
+                sh "sudo rm -rf /var/lib/jenkins/workspace/3t-dns2db"
             }
         }
 
