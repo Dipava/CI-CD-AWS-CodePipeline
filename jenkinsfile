@@ -50,7 +50,7 @@ pipeline {
 
         stage('apply: Module1') {
             steps {
-                sh "terraform apply -chdir="./Module1" -auto-approve"
+                sh 'terraform apply -chdir="./Module1" -auto-approve'
             }
         }
     }
