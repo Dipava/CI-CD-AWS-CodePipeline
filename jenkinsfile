@@ -53,7 +53,8 @@ pipeline {
                 sh "terraform apply -chdir="./Module1" -auto-approve"
             }
         }
-
+    }
+}    
 
 
 
