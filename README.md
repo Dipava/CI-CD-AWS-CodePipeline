@@ -11,7 +11,7 @@ sudo systemctl status jenkins
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum -y install terraform
-yum install git -y
+sudo yum install git -y
 
 
 copying private key to .ssh folder on the local system (1 time):
@@ -20,7 +20,7 @@ cp terraform-key-pem.pem ~/.ssh/terraform-key-pem.pem
 
 sudo chmod 600 ~/.ssh/terraform-key-pem.pem
 
-ssh -i ~/.ssh/terraform-key-pem.pem ec2-user@54.205.103.18
+ssh -i ~/.ssh/terraform-key-pem.pem ec2-user@54.152.180.223
 
 
 aws cli for linux (optional):

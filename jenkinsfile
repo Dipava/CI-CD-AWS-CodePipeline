@@ -10,7 +10,7 @@ pipeline {
         stage('checkoutfrom GIT') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/Dipava/CI-CD-AWS-CodePipeline'
+                url: 'https://github.com/Dipava/CI-CD-AWS-CodePipeline.git'
             }
         }
 
@@ -44,7 +44,7 @@ pipeline {
 
         stage('Apply-Approval: Module1') {
             steps {
-                input 'Do you want to Apply'
+                input 'Apply Module1 Resources'
             }
         }
 
@@ -57,116 +57,3 @@ pipeline {
 
 
 
-        stage('terraform init: Module2') {
-            steps {
-                sh 'terraform -chdir="./Module2" init'
-            }
-        }
-            
-        stage('terraform fmt: Module2') {
-            steps {
-                sh 'terraform -chdir="./Module2" fmt'
-            }
-        }
-        
-
-        stage('terraform validate: Module2') {
-            steps {
-                sh 'terraform -chdir="./Module2" validate'
-            }
-        }
-        
-
-
-        stage('terraform plan: Module2') {
-            steps {
-                sh 'terraform -chdir="./Module2" plan'
-            }
-        }
-
-
-        stage('Apply-Approval: Module2') {
-            steps {
-                input 'Do you want to Apply'
-            }
-        }
-
-        stage('apply: Module2') {
-            steps {
-                sh "terraform apply -chdir="./Module2" -var-file=secrets.tfvars -auto-approve"
-            }
-        }
-
-        stage('terraform init: Module3') {
-            steps {
-                sh 'terraform -chdir="./Module3" init'
-            }
-        }
-            
-        stage('terraform fmt: Module3') {
-            steps {
-                sh 'terraform -chdir="./Module3" fmt'
-            }
-        }
-        
-
-        stage('terraform validate: Module3') {
-            steps {
-                sh 'terraform -chdir="./Module3" validate'
-            }
-        }
-        
-
-
-        stage('terraform plan: Module3') {
-            steps {
-                sh 'terraform -chdir="./Module3" plan'
-            }
-        }
-
-
-        stage('Apply-Approval: Module3') {
-            steps {
-                input 'Do you want to Apply'
-            }
-        }
-
-        stage('apply: Module3') {
-            steps {
-                sh "terraform apply -chdir="./Module3" -auto-approve"
-            }
-        }
-        
-        stage('Destroy-Approval') {
-            steps {
-                input 'Do you want to Destroy'
-            }
-        }
-
-        stage('Destroy: Module 3') {
-            steps {
-                sh "terraform apply -chdir="./Module3" -auto-approve"
-            }
-        }
-
-                stage('Destroy: Module 2') {
-            steps {
-                sh "terraform apply -chdir="./Module2" -var-file=secrets.tfvars -auto-approve"
-            }
-        }
-
-                stage('Destroy: Module 1') {
-            steps {
-                sh "terraform apply -chdir="./Module1" -var-file=secrets.tfvars -auto-approve"
-            }
-        }
-
-
-        stage('Delete project directory') {
-            steps {
-                sh "sudo rm -rf /var/lib/jenkins/workspace/3t-dns2db"
-            }
-        }
-
-    }
-}
