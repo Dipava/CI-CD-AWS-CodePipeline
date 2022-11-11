@@ -20,7 +20,7 @@ cp terraform-key-pem.pem ~/.ssh/terraform-key-pem.pem
 
 sudo chmod 600 ~/.ssh/terraform-key-pem.pem
 
-ssh -i ~/.ssh/terraform-key-pem.pem ec2-user@54.152.180.223
+ssh -i ~/.ssh/terraform-key-pem.pem ec2-user@3.87.207.16
 
 
 aws cli for linux (optional):

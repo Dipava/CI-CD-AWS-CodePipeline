@@ -19,7 +19,7 @@ pipeline {
                 sh '''
                 cd Module1/
                 '''                
-                sh 'terraform -chdir="./Module1" init'
+                sh 'terraform init'
             }
         }
             
