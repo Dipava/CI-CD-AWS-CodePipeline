@@ -1,10 +1,5 @@
 pipeline {
     agent any
-	
-	 tools {
-  git 'Default'
-  terraform 'terraform-latest'
-		}
 
     stages {
         stage('checkoutfrom GIT') {
@@ -19,7 +14,7 @@ pipeline {
                 sh '''
                 cd Module1/
                 '''                
-                sh 'terraform init'
+                sh 'terraform -chdir="./Module1" init'
             }
         }
             
