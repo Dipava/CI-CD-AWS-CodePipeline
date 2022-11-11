@@ -129,6 +129,7 @@ pipeline {
 
         stage('apply: Module3') {
             steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE')
                 sh 'terraform -chdir="./Module3" apply -auto-approve'
             }
         }
