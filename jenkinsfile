@@ -16,12 +16,16 @@ pipeline {
 
         stage('terraform init: Module1') {
             steps {
+                sh '''
+                cd Module1/
+                '''                
                 sh 'terraform -chdir="./Module1" init'
             }
         }
             
         stage('terraform fmt: Module1') {
             steps {
+             
                 sh 'terraform -chdir="./Module1" fmt'
             }
         }
