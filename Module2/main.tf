@@ -22,13 +22,13 @@ module "rdsdb" {
   maintenance_window              = "Mon:00:00-Mon:03:00"
   backup_window                   = "03:00-06:00"
   enabled_cloudwatch_logs_exports = ["general"]
-  create_cloudwatch_log_group     = false
+  create_cloudwatch_log_group     = true
   create_random_password     = false
   backup_retention_period = 0
   skip_final_snapshot     = true
   deletion_protection     = false
   storage_encrypted       = false
-  create_monitoring_role  = false
+  create_monitoring_role  = true
   monitoring_interval     = 60
 
   parameters = [
