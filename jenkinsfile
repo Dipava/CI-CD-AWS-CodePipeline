@@ -9,14 +9,57 @@ pipeline {
             }
         }
 
-    stage('terraform init: Module2') {
+        stage('terraform init: Module1') {
             steps {
                 sh '''
-                cd Module2/
-                ''' 
+                cd Module1/
+                '''                
+                sh 'terraform -chdir="./Module1" init'
+            }
+        }
+            
+        stage('terraform fmt: Module1') {
+            steps {
+             
+                sh 'terraform -chdir="./Module1" fmt'
+            }
+        }
+        
+
+        stage('terraform validate: Module1') {
+            steps {
+                sh 'terraform -chdir="./Module1" validate'
+            }
+        }
+        
+
+
+        stage('terraform plan: Module1') {
+            steps {
+                sh 'terraform -chdir="./Module1" plan'
+            }
+        }
+
+
+        stage('Apply-Approval: Module1') {
+            steps {
+                input 'Apply Module1 Resources'
+            }
+        }
+
+        stage('apply: Module1') {
+            steps {
+                sh 'terraform -chdir="./Module1" apply -auto-approve'
+            }
+        }
+
+
+    stage('terraform init: Module2') {
+            steps {
                 sh 'terraform -chdir="./Module2" init'
             }
         }
+            
             
         stage('terraform fmt: Module2') {
             steps {
