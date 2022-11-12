@@ -129,7 +129,14 @@ pipeline {
 
         stage('apply: Module3') {
             steps {
-                sh 'terraform -chdir="./Module3" apply -auto-approve'
+                script {
+                    try {
+                      sh 'terraform -chdir="./Module3" apply -auto-approve'  
+                    }
+                    catch (err){
+                        echo err.getMessage()
+                    }             
+                }
             }
         }
 
