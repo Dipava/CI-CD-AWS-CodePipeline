@@ -95,15 +95,78 @@ pipeline {
             }
         }
 
-        stage('Destroy-Approval: Module2') {
+        stage('terraform init: Module3') {
             steps {
-                input 'Destroy Module2 Resources'
+                sh 'terraform -chdir="./Module3" init'
+            }
+        }
+            
+        stage('terraform fmt: Module3') {
+            steps {
+                sh 'terraform -chdir="./Module3" fmt'
+            }
+        }
+        
+
+        stage('terraform validate: Module3') {
+            steps {
+                sh 'terraform -chdir="./Module3" validate'
+            }
+        }
+
+        stage('terraform plan: Module3') {
+            steps {
+                sh 'terraform -chdir="./Module3" plan'
+            }
+        }
+
+
+        stage('Apply-Approval: Module3') {
+            steps {
+                input 'Apply Module3 Resources'
+            }
+        }
+
+        stage('apply: Module3') {
+            steps {
+                script {
+                    try {
+                      sh 'terraform -chdir="./Module3" apply -auto-approve'  
+                    }
+                    catch (err){
+                        echo err.getMessage()
+                    }             
+                }
+            }
+        }
+
+        stage('Destroy-Approval') {
+            steps {
+                input 'Destroy All Resources'
+            }
+        }
+
+        stage('Destroy: Module 3') {
+            steps {
+                sh 'terraform -chdir="./Module3" destroy -auto-approve'
             }
         }
 
         stage('Destroy: Module 2') {
             steps {
-                sh 'terraform -chdir="./Module2" destroy -auto-approve'
+                sh 'terraform -chdir="./Module2" destroy -var-file=secrets.tfvars -auto-approve'
+            }
+        }
+
+        stage('Destroy: Module 1') {
+            steps {
+                sh 'terraform -chdir="./Module1" destroy -auto-approve'
+            }
+        }
+
+        stage('Delete project directory') {
+            steps {
+                sh 'sudo rm -rf /var/lib/jenkins/workspace/3t-dns2db'
             }
         }
 
