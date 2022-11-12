@@ -97,7 +97,7 @@ pipeline {
 
         stage('terraform init: Module3') {
             steps {
-                sh 'terraform -chdir="./Module3" init'
+                sh 'terraform -chdir="./Module3" init -migrate-state'
             }
         }
             
