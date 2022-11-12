@@ -28,7 +28,7 @@ module "rdsdb" {
   skip_final_snapshot     = true
   deletion_protection     = false
   storage_encrypted       = false
-  create_monitoring_role  = true
+  create_monitoring_role  = false
   monitoring_interval     = 60
 
   parameters = [
