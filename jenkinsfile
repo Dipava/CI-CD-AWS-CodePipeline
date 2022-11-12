@@ -52,6 +52,12 @@ pipeline {
                 sh 'terraform -chdir="./Module1" apply -auto-approve'
             }
         }
+        
+        stage('Destroy: Module 1') {
+            steps {
+                sh 'terraform -chdir="./Module1" destroy -auto-approve'
+            }
+        }
 
         stage('terraform init: Module2') {
             steps {
