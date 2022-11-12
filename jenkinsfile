@@ -52,7 +52,7 @@ pipeline {
                 sh 'terraform -chdir="./Module1" apply -auto-approve'
             }
         }
-        
+
         stage('Destroy: Module 1') {
             steps {
                 sh 'terraform -chdir="./Module1" destroy -auto-approve'
@@ -161,12 +161,6 @@ pipeline {
                 stage('Destroy: Module 2') {
             steps {
                 sh 'terraform -chdir="./Module2" destroy -var-file=secrets.tfvars -auto-approve'
-            }
-        }
-
-                stage('Destroy: Module 1') {
-            steps {
-                sh 'terraform -chdir="./Module1" destroy -auto-approve'
             }
         }
 
