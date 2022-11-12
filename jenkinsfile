@@ -53,7 +53,7 @@ pipeline {
             }
         }
 
-        stage('Apply-Approval: Module1') {
+        stage('Destroy-Approval: Module1') {
             steps {
                 input 'Destroy Module1 Resources'
             }
