@@ -9,59 +9,58 @@ pipeline {
             }
         }
 
-        stage('terraform init: Module1') {
+    stage('terraform init: Module2') {
             steps {
                 sh '''
-                cd Module1/
-                '''                
-                sh 'terraform -chdir="./Module1" init'
+                cd Module2/
+                ''' 
+                sh 'terraform -chdir="./Module2" init'
             }
         }
             
-        stage('terraform fmt: Module1') {
+        stage('terraform fmt: Module2') {
             steps {
-             
-                sh 'terraform -chdir="./Module1" fmt'
+                sh 'terraform -chdir="./Module2" fmt'
             }
         }
         
 
-        stage('terraform validate: Module1') {
+        stage('terraform validate: Module2') {
             steps {
-                sh 'terraform -chdir="./Module1" validate'
+                sh 'terraform -chdir="./Module2" validate'
             }
         }
         
 
 
-        stage('terraform plan: Module1') {
+        stage('terraform plan: Module2') {
             steps {
-                sh 'terraform -chdir="./Module1" plan'
+                sh 'terraform -chdir="./Module2" plan -var-file=secrets.tfvars'
             }
         }
 
 
-        stage('Apply-Approval: Module1') {
+        stage('Apply-Approval: Module2') {
             steps {
-                input 'Apply Module1 Resources'
+                input 'Apply Module2 Resources'
             }
         }
 
-        stage('apply: Module1') {
+        stage('apply: Module2') {
             steps {
-                sh 'terraform -chdir="./Module1" apply -auto-approve'
+                sh 'terraform -chdir="./Module2" apply -var-file=secrets.tfvars -auto-approve'
             }
         }
 
-        stage('Destroy-Approval: Module1') {
+        stage('Destroy-Approval: Module2') {
             steps {
-                input 'Destroy Module1 Resources'
+                input 'Destroy Module2 Resources'
             }
         }
 
-        stage('Destroy: Module 1') {
+        stage('Destroy: Module 2') {
             steps {
-                sh 'terraform -chdir="./Module1" destroy -auto-approve'
+                sh 'terraform -chdir="./Module2" destroy -auto-approve'
             }
         }
 
