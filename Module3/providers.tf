@@ -18,7 +18,7 @@ terraform {
      bucket =  "dipava-tfstate-files"
      key = "dev/module3-asg-alb/alb-asg.tfstate"
      region = "us-east-1"
-     dynamodb_table =  "module3-alb-asg"
+     dynamodb_table =  "module3-asg-alb"
     }
 }
 
